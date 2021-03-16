@@ -14,7 +14,7 @@ class CreatePostsTable extends Migration
     public function up()
     {
         Schema::create('posts', function (Blueprint $table) {
-            $table->id();
+            $table->primary('id');
             $table->unsignedBigInteger('user_id');
             $table->string('post_title');
             $table->string('post_description');
@@ -23,6 +23,8 @@ class CreatePostsTable extends Migration
 
 
             $table->foreign('user_id')->references('id')->on('users');
+            $table->index(['user_id']);
+
         });
     }
 

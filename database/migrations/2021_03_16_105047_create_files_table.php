@@ -14,13 +14,15 @@ class CreateFilesTable extends Migration
     public function up()
     {
         Schema::create('files', function (Blueprint $table) {
-            $table->id();
+            $table->primary('id');
             $table->unsignedBigInteger('post_id');
             $table->string('name', 40);
             $table->string('url', 80);
             $table->timestamps();
 
             $table->foreign('post_id')->references('id')->on('posts');
+            $table->index(['post_id']);
+
 
         });
     }
