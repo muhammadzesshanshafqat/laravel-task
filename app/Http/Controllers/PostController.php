@@ -46,7 +46,27 @@ class PostController extends Controller {
     public function show(Request $request) {
         $postId = $request->postId;
         $post = Post::find($postId);
-        return $post;
+        $files = File::where('post_id', 1)->get();
+
+        return response()->json([
+            'id' => $post->id,
+            'user_id' => $post->user_id,
+            'post_title' => $post->post_title,
+            'post_description' => $post->post_description,
+            'created_at' => $post->created_at,
+            'updated_at' => $post->updated_at,
+            'num_attachments' => $post->attachments,
+            'files' => $files
+        ], 200);
+    }
+
+    //This needs to be fixed
+    public function getFile(Request $request) {
+        $fileId = $request->id;
+        $file = File::find($fileId);
+        $fileNameArray = explode('/', $file->url);
+        $contents = Storage::get(last($fileNameArray));
+        return $contents;
     }
       /**
      * Display posts for a user.
