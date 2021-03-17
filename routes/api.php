@@ -33,7 +33,8 @@ Route::middleware('web')->get('/auth/redirect', [SocialiteAuthController::class,
 Route::middleware('web')->get('/auth/callback', [SocialiteAuthController::class, 'googleCallback']);
 
 Route::post('/fileUpload', [PostController::class, 'uploadFile']);
-Route::get('/fileUpload', [PostController::class, 'viewUploadsForPost']);
+Route::get('/fileUpload', [PostController::class, 'getFile']);
+Route::get('/fileUploads', [PostController::class, 'viewUploadsForPost']);
 
 
 
