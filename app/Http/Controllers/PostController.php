@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Post;
+use App\Models\File;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller {
     /**
@@ -21,12 +23,6 @@ class PostController extends Controller {
         if($user === null) {
             abort(404, "User does not exist");
         }
-
-        // $isAuthenticated = Auth::id() === $userId;
-
-        // if(!$isAuthenticated) {
-        //     abort(401, "You are not authorised. Please login if you have an account or signup.");
-        // }
 
         $postTitle = $request->postTitle;
         $postDescription = $request->postDescription;
@@ -63,4 +59,40 @@ class PostController extends Controller {
         $posts = Post::where('user_id', $userId)->get();
         return $posts;
     }
+
+    public function uploadFile(Request $request) {
+        $postId = $request->postId;
+        if ($request->hasFile('image')) {
+            if ($request->file('image')->isValid()) {
+                $validated = $request->validate([
+                    'name' => 'string|max:40',
+                    'image' => 'mimes:jpg,jpeg,png|max:90000',
+                ]);
+
+                $extension = $request->image->extension();
+                $request->image->storeAs('/public', $validated['name'].".".$extension);
+                $url = Storage::url($validated['name'].".".$extension);
+                $file = File::create([
+                    'post_id' => $postId,
+                    'name' => $validated['name'],
+                    'url' => $url
+                ]);
+
+                $post = Post::find($postId);
+                if(isset($post)){
+                    $post->increment('attachments');
+                }
+                $post->save();
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    public function viewUploadsForPost (Request $request) {
+        $postId = $request->postId;
+        return File::where('post_id', 1)->get();
+    }
 }
+
