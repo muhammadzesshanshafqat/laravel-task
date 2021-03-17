@@ -32,4 +32,9 @@ Route::middleware('auth:api')->get('/auth/user',  [AuthController::class, 'user'
 Route::middleware('web')->get('/auth/redirect', [SocialiteAuthController::class, 'redirectToGoogle']);
 Route::middleware('web')->get('/auth/callback', [SocialiteAuthController::class, 'googleCallback']);
 
+Route::post('/fileUpload', [PostController::class, 'uploadFile']);
+Route::get('/fileUpload', [PostController::class, 'viewUploadsForPost']);
+
+
+
 
