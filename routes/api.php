@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\SocialiteAuthController;
 use Laravel\Socialite\Facades\Socialite;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
@@ -28,14 +29,7 @@ Route::middleware('auth:api')->get('/auth/logout', [AuthController::class, 'logo
 Route::middleware('auth:api')->get('/auth/user',  [AuthController::class, 'user']);
 
 //Socialite routes
-Route::middleware('web')->get('/auth/redirect', function () {
-    return Socialite::driver('google')
-    ->redirect();
-});
-
-Route::middleware('web')->get('/auth/callback', function () {
-    $user = Socialite::driver('google')->user();
-    return $user;
-});
+Route::middleware('web')->get('/auth/redirect', [SocialiteAuthController::class, 'redirectToGoogle']);
+Route::middleware('web')->get('/auth/callback', [SocialiteAuthController::class, 'googleCallback']);
 
 
