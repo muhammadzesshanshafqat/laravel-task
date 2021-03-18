@@ -44,8 +44,7 @@ class AuthController extends Controller {
      * @return [string] token_type
      * @return [string] expires_at
      */
-    public function login(Request $request)
-    {
+    public function login(Request $request) {
         $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
@@ -98,8 +97,7 @@ class AuthController extends Controller {
      *
      * @return [json] user object
      */
-    public function user(Request $request)
-    {
+    public function user(Request $request) {
         return response()->json($request->user());
     }
     
