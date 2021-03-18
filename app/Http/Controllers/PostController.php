@@ -46,7 +46,7 @@ class PostController extends Controller {
     public function show(Request $request) {
         $postId = $request->postId;
         $post = Post::find($postId);
-        $files = File::where('post_id', 1)->get();
+        $files = File::where('post_id', $postId)->get();
 
         return response()->json([
             'id' => $post->id,
@@ -77,7 +77,13 @@ class PostController extends Controller {
     public function showAllForUser(Request $request) {
         $userId = $request->userId;
         $posts = Post::where('user_id', $userId)->get();
-        return $posts;
+        $postCollection = collect();
+        foreach($posts as $post) {
+            $files = File::where('post_id', $post->id)->get();
+            $post->files = $files;
+            $postCollection->add($post);
+        }
+        return $postCollection;
     }
 
     public function uploadFile(Request $request) {
