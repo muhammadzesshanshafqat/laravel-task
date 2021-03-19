@@ -71,6 +71,7 @@ class AuthController extends Controller {
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
+            'user' => $user,
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
             'expires_at' => Carbon::parse(
@@ -84,8 +85,7 @@ class AuthController extends Controller {
      *
      * @return [string] message
      */
-    public function logout(Request $request)
-    {
+    public function logout(Request $request) {
         $request->user()->token()->revoke();
         return response()->json([
             'message' => 'Successfully logged out'
