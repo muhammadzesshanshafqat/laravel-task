@@ -25,7 +25,7 @@ Route::get('/posts', [PostController::class, 'showAllForUser']);
 //Authentication
 Route::post('/auth/signup', [AuthController::class, 'signup']);
 Route::post('/auth/login', [AuthController::class, 'login']);
-Route::middleware('auth:api')->get('/auth/logout', [AuthController::class, 'logout']);
+Route::middleware('auth:api')->post('/auth/logout', [AuthController::class, 'logout']);
 Route::middleware('auth:api')->get('/auth/user',  [AuthController::class, 'user']);
 
 //Socialite routes
